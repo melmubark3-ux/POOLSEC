@@ -1,4 +1,4 @@
-name: Build POOLSEC
+name: Build POOLSEC.dll
 
 on:
   push:
@@ -12,22 +12,24 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup .NET Framework
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '8.x'
+      - name: Add MSBuild to PATH
+        uses: microsoft/setup-msbuild@v2
 
-      - name: Build
+      - name: Verify ref-cad contents
+        run: dir ref-cad
         shell: cmd
+
+      - name: Build with MSBuild (classic)
         run: |
-          cd ref-cad
-          dir
-          cd ..
-          dotnet restore
-          dotnet build -c Release -v minimal
+          MSBuild.exe POOLSEC.csproj /p:Configuration=Release /p:Platform="Any CPU" /t:Rebuild
+        shell: cmd
+
+      - name: List output files
+        run: dir bin\Release /s
+        shell: cmd
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: POOLSEC-x64
-          path: bin/Release/net48/POOLSEC.dll
+          path: bin\Release\POOLSEC.dll
