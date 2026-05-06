@@ -1,0 +1,5 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Binary files (AutoCAD reference assemblies)
+ref-cad/*.dll filter=lfs diff=lfs merge=lfs -text
