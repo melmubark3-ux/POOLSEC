@@ -20,12 +20,7 @@ jobs:
         shell: cmd
 
       - name: Build with MSBuild
-        run: >
-          msbuild POOLSEC.csproj
-          /p:Configuration=Release
-          /p:Platform=x64
-          /t:Build
-          /v:minimal
+        run: msbuild POOLSEC.csproj /p:Configuration=Release /p:Platform=AnyCPU /t:Build /v:minimal
         shell: cmd
 
       - name: List output files
