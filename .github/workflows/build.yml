@@ -12,24 +12,36 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Add MSBuild to PATH
-        uses: microsoft/setup-msbuild@v2
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.x'
 
       - name: Verify ref-cad contents
         run: dir ref-cad
         shell: cmd
 
-      - name: Build with MSBuild (classic)
-        run: |
-          MSBuild.exe POOLSEC.csproj /p:Configuration=Release /p:Platform="Any CPU" /t:Rebuild
+      - name: Restore NuGet packages
+        run: dotnet restore
+        shell: cmd
+
+      - name: Build with dotnet
+        run: dotnet build POOLSEC.csproj -c Release --no-restore -v minimal
         shell: cmd
 
       - name: List output files
-        run: dir bin\Release /s
+        run: dir bin\Release\net48\ /s
         shell: cmd
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: POOLSEC-x64
-          path: bin\Release\POOLSEC.dll
+          path: bin\Release\net48\POOLSEC.dll
+
+      - name: Upload debug log on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-logs
+          path: bin\
