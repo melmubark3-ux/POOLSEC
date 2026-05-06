@@ -30,9 +30,5 @@
       <HintPath>ref-cad\AcCoreMgd.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="AcCoreMgd">
-      <HintPath>ref-cad\AcCoreMgd.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
   </ItemGroup>
 </Project>
